@@ -1,7 +1,7 @@
 
 Baseline Implementation of Popular Deep Learning Papers
 
-This is a project by [AI Commons](https://commons.specpal.science), aimed at makind Deep Learning Research papers easier to comprehend. 
+This is a project by [AI Commons](https://commons.specpal.science), aimed at making Deep Learning Research papers easier to comprehend. 
 This repo contains the implementation of all the papers reviewed on [Deep Review Blog](https://medium.com/deepreview)
 
 
