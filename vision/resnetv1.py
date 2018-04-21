@@ -61,6 +61,7 @@ def Resnet(input_shape,num_layers=50,num_classes=10):
 
     x = Conv2D(64,kernel_size=7,strides=2,padding="same")(input)
     x = BatchNormalization()(x)
+    x = Activation("relu")(x)
 
     for i in range(3):
         num_filters = filters[i]
