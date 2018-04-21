@@ -1,4 +1,4 @@
-Implementation of Important Deep Learning papers in the domain of computer vision and patter recognition.
+Implementation of Important Deep Learning papers in the domain of computer vision and pattern recognition.
 Review of the papers implemented here are available a (https://medium.com/deepreview)
 
 [Deep Residual Learning for Image Recognition](resnetv1.py)
