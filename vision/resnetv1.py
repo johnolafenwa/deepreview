@@ -88,7 +88,7 @@ def Resnet(input_shape,num_layers=50,num_classes=10):
     
     x = resnet_first_module(x,filters[0])
 
-    for i in range(3):
+    for i in range(4):
         num_filters = filters[i]
         num_layers = layers[i]
            
