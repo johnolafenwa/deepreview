@@ -107,7 +107,7 @@ def Resnet(input_shape,num_layers=50,num_classes=10):
     return model
 
 
-model = Resnet(input_shape=(32,32,3),num_layers=101)
+model = Resnet(input_shape=(32,32,3),num_layers=50)
 model.summary()
 
 
