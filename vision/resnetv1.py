@@ -176,7 +176,7 @@ def lr_schedule(epoch):
 
 #*********************TRAINING CODE FOR CIFAR10 *****************#
 
-#Compile the model to use adam optimizer and categorical cross entropy loss
+#Compile the model to use SGD optimizer and categorical cross entropy loss
 model.compile(loss='categorical_crossentropy',
               optimizer=SGD(lr=lr_schedule(0),momentum=0.95,nesterov=True),
               metrics=['accuracy'])
