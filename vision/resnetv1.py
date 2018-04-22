@@ -33,10 +33,10 @@ def resnet_module(x,filters,pool=False):
     return x
 
 #A resnet block consisting of N number of resnet modules, first layer has is pooled.
-def resnet_block(x,filters,num_layers):
+def resnet_block(x,filters,num_layers,pool_first=True):
     for i in range(num_layers):
-        pool = True
-        if i > 0: pool = False
+        pool = False
+        if i == 0 and pool_first == True: pool = True
         x = resnet_module(x,filters=filters,pool=pool)
     return x
 
@@ -66,8 +66,9 @@ def Resnet(input_shape,num_layers=50,num_classes=10):
     for i in range(3):
         num_filters = filters[i]
         num_layers = layers[i]
-
-        x = resnet_block(x,filters=num_filters,num_layers=num_layers)
+        pool_first = True
+        if i == 0: pool_first = False
+        x = resnet_block(x,filters=num_filters,num_layers=num_layers,pool_first=pool_first)
 
     x = GlobalAveragePooling2D()(x)
     x = Dense(num_classes)(x)
