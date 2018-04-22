@@ -32,11 +32,32 @@ def resnet_module(x,filters,pool=False):
 
     return x
 
+def resnet_first_module(x,filters):
+    res = x
+    stride = 1
+    res = Conv2D(filters,kernel_size=1,strides=1,padding="same")(res)
+
+    x = Conv2D(int(filters/4),kernel_size=1,strides=stride,padding="same")(x)
+    x = BatchNormalization()(x)
+    x = Activation("relu")(x)
+
+    x = Conv2D(int(filters/4), kernel_size=3, strides=1, padding="same")(x)
+    x = BatchNormalization()(x)
+    x = Activation("relu")(x)
+
+    x = Conv2D(filters, kernel_size=1, strides=1, padding="same")(x)
+    x = BatchNormalization()(x)
+
+    x = add([x,res])
+    x = Activation("relu")(x)
+
+    return x
+
 #A resnet block consisting of N number of resnet modules, first layer has is pooled.
-def resnet_block(x,filters,num_layers,pool_first=True):
+def resnet_block(x,filters,num_layers,pool_first_layer=True):
     for i in range(num_layers):
         pool = False
-        if i == 0 and pool_first == True: pool = True
+        if i == 0 and pool_first_layer: pool = True
         x = resnet_module(x,filters=filters,pool=pool)
     return x
 
@@ -62,13 +83,20 @@ def Resnet(input_shape,num_layers=50,num_classes=10):
     x = Conv2D(64,kernel_size=7,strides=2,padding="same")(input)
     x = BatchNormalization()(x)
     x = Activation("relu")(x)
+    
+    x = MaxPooling2D(pool_size=(3,3),strides=(2,2))(x)
+    
+    x = resnet_first_module(x,filters[0])
 
     for i in range(3):
         num_filters = filters[i]
         num_layers = layers[i]
+           
         pool_first = True
-        if i == 0: pool_first = False
-        x = resnet_block(x,filters=num_filters,num_layers=num_layers,pool_first=pool_first)
+        if i == 0:
+            pool_first = False
+            num_layers = num_layers - 1
+        x = resnet_block(x,filters=num_filters,num_layers=num_layers,pool_first_layer=pool_first)
 
     x = GlobalAveragePooling2D()(x)
     x = Dense(num_classes)(x)
