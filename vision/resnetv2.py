@@ -84,9 +84,8 @@ def ResnetV2(input_shape, num_layers=50, num_classes=10):
     filters = block_filters[num_layers]
     input = Input(input_shape)
 
+    #Since the first layers in the modules are bn and relu, we do not include bn and relu after the first conv
     x = Conv2D(64, kernel_size=7, strides=2, padding="same")(input)
-    x = BatchNormalization()(x)
-    x = Activation("relu")(x)
 
     x = MaxPooling2D(pool_size=(3, 3), strides=(2, 2))(x)
 
@@ -101,6 +100,10 @@ def ResnetV2(input_shape, num_layers=50, num_classes=10):
             pool_first = False
             num_layers = num_layers - 1
         x = resnet_block(x, filters=num_filters, num_layers=num_layers, pool_first_layer=pool_first)
+
+    #Since the output of the residual unit is addition of convs, we need to appy bn and relu before global average pooling
+    x = BatchNormalization()(x)
+    x = Activation("relu")(x)
 
     x = GlobalAveragePooling2D()(x)
     x = Dense(num_classes)(x)
