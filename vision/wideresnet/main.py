@@ -11,7 +11,6 @@ from math import ceil
 
 # A single wide resnet module consisting of two 3 x 3 convs
 def wide_resnet_module(x, filters, stride=1,dropout_ratio=0.0):
-    print(x.shape[3])
     res = x
     if x.shape[3] != filters:
         res = Conv2D(filters, kernel_size=1, strides=stride, padding="same",kernel_initializer="he_normal")(res)
@@ -51,8 +50,8 @@ def Resnet(input_shape, num_layers=16, k=4, num_classes=10,dropout_ratio=0.25):
     x = Conv2D(16,kernel_size=3,padding="same")(input)
 
     x = wide_resnet_block(x,filters=int(16 * k),num_layers=n,dropout_ratio=dropout_ratio)
-    x = wide_resnet_block(x, filters=int(32 * k), num_layers=n,dropout_ratio=dropout_ratio)
-    x = wide_resnet_block(x, filters=int(64 * k), num_layers=n,dropout_ratio=dropout_ratio)
+    x = wide_resnet_block(x, filters=int(32 * k), num_layers=n,stride=2,dropout_ratio=dropout_ratio)
+    x = wide_resnet_block(x, filters=int(64 * k), num_layers=n,stride=2,dropout_ratio=dropout_ratio)
 
     x = BatchNormalization()(x)
     x = Activation("relu")(x)
